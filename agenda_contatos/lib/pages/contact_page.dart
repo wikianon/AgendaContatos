@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../helpers/contact_helper.dart';
 import 'package:image_picker/image_picker.dart';
+//pegando imagen da camera ou galeria.
+//https://www.youtube.com/watch?v=Z8eIAm9KfdM
 
 class ContactPage extends StatefulWidget {
   //para que contact seja opcional ao chamar oconstrutor
@@ -40,8 +42,49 @@ class _ContactPageState extends State<ContactPage> {
       _emailController.text = _editedContact.email!;
       _phoneController.text = _editedContact.phone!;
     }
+  } //initState
+/*
+  void pegarImagenDaCamera() {
+    ImagePicker().pickImage(source: ImageSource.camera).then((file) {
+      if (file == null) return;
+      setState(() {
+        _editedContact.imagens = file.path;
+      });
+    });
   }
 
+  void pegarImagenGalery() {
+    //Pega a imagen da galeria.
+
+    ImagePicker().pickImage(source: ImageSource.gallery).then((galery) {
+      if (galery == null) return;
+      setState(() {
+        _editedContact.imagens = galery.path;
+      });
+    });
+  }
+
+  Widget getImagenEscolha() {
+    return Expanded(
+      child: Row(
+        children: [
+          ElevatedButton(
+            child: const Text('Camera'),
+            onPressed: () {
+              pegarImagenDaCamera();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Galery'),
+            onPressed: () {
+              pegarImagenGalery();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+*/
   @override
   Widget build(BuildContext context) {
     //Para mostrar o texto quando o usuario editar
@@ -96,8 +139,8 @@ class _ContactPageState extends State<ContactPage> {
                         ),
                 ), //Container
 
+                
                 onTap: () {
-                  
                   ImagePicker().pickImage(source: ImageSource.camera).then((file) {
                     if (file == null) return;
                     setState(() {
@@ -107,7 +150,6 @@ class _ContactPageState extends State<ContactPage> {
 
                   /*
                   //Pega a imagen da galeria.
-                  
                   ImagePicker().pickImage(source: ImageSource.gallery).then((galery) {
                     if (galery == null) return;
                     setState(() {
@@ -115,7 +157,8 @@ class _ContactPageState extends State<ContactPage> {
                     });
                   });
                   */
-                },
+                }, //onTap
+                
               ), //GestureDetector
 
               //usando o TextField para editar o contato
