@@ -28,12 +28,12 @@ class ContactHelper {
   //ficando assim: Database? _database;
   //ou
   //static Database? _database;
-  
+
   //Para compararmos se um banco dedados == null
   //podemos utilizar um var ao invés de declarar
   //a variavel como nullable
   var _database;
-  
+
   Future<Database> get getDatabase async {
     if (_database != null) {
       return _database;
@@ -61,49 +61,48 @@ class ContactHelper {
 
   //Salvando os contatos
   Future<Contact> saveContact(Contact contact) async {
-    
     Database dbContact = await getDatabase;
 
     //Para usarmos o contact.toMap() temos que fazer um casting que define o seu tipo.
-    contact.id = await dbContact.insert(contactTable, contact.toMap() as Map<String, dynamic>);
-    
+    contact.id = await dbContact.insert(
+        contactTable, contact.toMap() as Map<String, dynamic>);
+
     return contact;
   } //saveContact
 
   Future<Contact?> getContact(int id) async {
     Database dbContact = await getDatabase;
-    List<Map> maps = await dbContact.query(
-      contactTable,
-      columns: [idColumn, nameColumn, emailColumn, phoneColumn, imageColumn],
-      where: "$idColumn = ?",
-      whereArgs: [id]
-    );
+    List<Map> maps = await dbContact.query(contactTable,
+        columns: [idColumn, nameColumn, emailColumn, phoneColumn, imageColumn],
+        where: "$idColumn = ?",
+        whereArgs: [id]);
 
-    if(maps.isNotEmpty){
+    if (maps.isNotEmpty) {
       return Contact.fromMap(maps.first);
-    }
-    else
-    {
-      return null; 
+    } else {
+      return null;
     }
   } //getContact
 
   //como o delete retorna um inteiro indicando sucesso ou não
   //usaremos um Future<int>
- Future<int> deleteContact(int id) async {
+  Future<int> deleteContact(int id) async {
     Database dbContact = await getDatabase;
 
-    return await dbContact.delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
+    return await dbContact
+        .delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
   } //deleteContact
 
   //atualizando os contatos
-  Future<int> updateContact(Contact contact)async{
+  Future<int> updateContact(Contact contact) async {
     Database dbContact = await getDatabase;
 
-    return await dbContact.update(contactTable, contact.toMap() as Map<String, dynamic>, where: "$idColumn = ?", whereArgs: [contact.id]);
+    return await dbContact.update(
+        contactTable, contact.toMap() as Map<String, dynamic>,
+        where: "$idColumn = ?", whereArgs: [contact.id]);
   }
 
- Future<List> getAllContacts() async{
+  Future<List> getAllContacts() async {
     Database dbContact = await getDatabase;
 
     //criando uma lista de contatos
@@ -112,7 +111,7 @@ class ContactHelper {
     //lista do tipo Contact
     List<Contact> listContact = [];
 
-    for(Map map in listMap){
+    for (Map map in listMap) {
       listContact.add(Contact.fromMap(map));
     }
 
@@ -120,13 +119,14 @@ class ContactHelper {
   } //getAllContacts
 
   //Obtendo o numero de contatos da lista.
-  Future<int?> getNumber() async{
+  Future<int?> getNumber() async {
     Database dbContact = await getDatabase;
 
-    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
+    return Sqflite.firstIntValue(
+        await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
   } //getNumber
 
- Future<void> closeDatabase() async{
+  Future<void> closeDatabase() async {
     Database dbContact = await getDatabase;
     dbContact.close();
   }
@@ -166,7 +166,7 @@ class Contact {
       phoneColumn: phone,
       imageColumn: imagens
     };
-    
+
     map[idColumn] = id;
 
     return map;

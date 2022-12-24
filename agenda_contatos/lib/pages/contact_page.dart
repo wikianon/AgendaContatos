@@ -39,11 +39,15 @@ class _ContactPageState extends State<ContactPage> {
     if (widget.contact == null) {
       _editedContact = Contact();
     } else {
-      _editedContact = Contact.fromMap(widget.contact!.toMap());
+      _editedContact = widget.contact!;
 
-      _nameController.text = _editedContact.name!;
-      _emailController.text = _editedContact.email!;
-      _phoneController.text = _editedContact.phone!;
+      //Transformando em um objeto do tipo Map 
+      //e decodificando com o fromMap
+      //_editedContact = Contact.fromMap(widget.contact!.toMap());
+
+      _nameController.text = _editedContact.name ?? '';
+      _emailController.text = _editedContact.email ?? '';
+      _phoneController.text = _editedContact.phone ?? '';
     }
   } //initState
 
@@ -160,10 +164,10 @@ class _ContactPageState extends State<ContactPage> {
   void _getImgGalery() {
     _getImg(ImageSource.gallery);
   }
-  
+
   //Tipando o método para pegar a imagen.
-  void _getImg(ImageSource source) {
-    ImagePicker().pickImage(source: source).then((value) {
+  void _getImg(ImageSource photoFrom) {
+    ImagePicker().pickImage(source: photoFrom).then((value) {
       if (value == null) return;
       setState(() {
         _editedContact.imagens = value.path;
@@ -171,12 +175,16 @@ class _ContactPageState extends State<ContactPage> {
     });
   }
 
+  //Método para pegar uma imagen da camera ou galeria.
   void _requestImage() {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Click em camera ou a galery"),
+            title: const Text(
+              "Click em camera ou galery",
+              style: TextStyle(color: Colors.blue),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -185,7 +193,10 @@ class _ContactPageState extends State<ContactPage> {
                   //para fechar a caixa de dialogo.
                   Navigator.pop(context);
                 },
-                child: const Text("Camera"),
+                child: const Text(
+                  "Camera",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
 
               TextButton(
@@ -195,7 +206,10 @@ class _ContactPageState extends State<ContactPage> {
                   //para fechar a caixa de dialogo.
                   Navigator.pop(context);
                 },
-                child: const Text("Galery"),
+                child: const Text(
+                  "Galery",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ), //TextButton
 
               TextButton(
@@ -203,7 +217,10 @@ class _ContactPageState extends State<ContactPage> {
                   //fecha a janela se não quiser mais adicionar uma imagen
                   Navigator.pop(context);
                 },
-                child: const Text('Voltar'),
+                child: const Text(
+                  'Voltar',
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
             ],
           );
@@ -216,14 +233,23 @@ class _ContactPageState extends State<ContactPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Descartar Alteraçoes?'),
-            content: const Text('Se sair as alterações serão perdidas.'),
+            title: const Text(
+              'Descartar Alteraçoes?',
+              style: TextStyle(color: Colors.red),
+            ),
+            content: const Text(
+              'Se sair as alterações serão perdidas.',
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            ),
             actions: [
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Voltar'),
+                child: const Text(
+                  'Voltar',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -233,7 +259,10 @@ class _ContactPageState extends State<ContactPage> {
                   //remover o contact_page
                   Navigator.pop(context);
                 },
-                child: const Text('Descartar'),
+                child: const Text(
+                  'Descartar',
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             ],
           );
