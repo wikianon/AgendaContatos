@@ -18,10 +18,13 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
+  //Para pegar o input do usuario
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
 
+  //caso o usuario clique em salvar sem entrar com nenhum nome
+  //foca no campo nome para inserir
   final _nameFocus = FocusNode();
 
   late Contact _editedContact;
@@ -43,48 +46,7 @@ class _ContactPageState extends State<ContactPage> {
       _phoneController.text = _editedContact.phone!;
     }
   } //initState
-/*
-  void pegarImagenDaCamera() {
-    ImagePicker().pickImage(source: ImageSource.camera).then((file) {
-      if (file == null) return;
-      setState(() {
-        _editedContact.imagens = file.path;
-      });
-    });
-  }
 
-  void pegarImagenGalery() {
-    //Pega a imagen da galeria.
-
-    ImagePicker().pickImage(source: ImageSource.gallery).then((galery) {
-      if (galery == null) return;
-      setState(() {
-        _editedContact.imagens = galery.path;
-      });
-    });
-  }
-
-  Widget getImagenEscolha() {
-    return Expanded(
-      child: Row(
-        children: [
-          ElevatedButton(
-            child: const Text('Camera'),
-            onPressed: () {
-              pegarImagenDaCamera();
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Galery'),
-            onPressed: () {
-              pegarImagenGalery();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-*/
   @override
   Widget build(BuildContext context) {
     //Para mostrar o texto quando o usuario editar
@@ -139,26 +101,9 @@ class _ContactPageState extends State<ContactPage> {
                         ),
                 ), //Container
 
-                
                 onTap: () {
-                  ImagePicker().pickImage(source: ImageSource.camera).then((file) {
-                    if (file == null) return;
-                    setState(() {
-                      _editedContact.imagens = file.path;
-                    });
-                  });
-
-                  /*
-                  //Pega a imagen da galeria.
-                  ImagePicker().pickImage(source: ImageSource.gallery).then((galery) {
-                    if (galery == null) return;
-                    setState(() {
-                      _editedContact.imagens = galery.path;
-                    });
-                  });
-                  */
+                  _requestImage();
                 }, //onTap
-                
               ), //GestureDetector
 
               //usando o TextField para editar o contato
@@ -205,6 +150,65 @@ class _ContactPageState extends State<ContactPage> {
       ),
     );
   }
+
+  //Função para pegar a imagen da camera.
+  void _getImgCamera() {
+    _getImg(ImageSource.camera);
+  }
+
+  //Função para pegar a imagen da galeria.
+  void _getImgGalery() {
+    _getImg(ImageSource.gallery);
+  }
+  
+  //Tipando o método para pegar a imagen.
+  void _getImg(ImageSource source) {
+    ImagePicker().pickImage(source: source).then((value) {
+      if (value == null) return;
+      setState(() {
+        _editedContact.imagens = value.path;
+      });
+    });
+  }
+
+  void _requestImage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Click em camera ou a galery"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _getImgCamera();
+
+                  //para fechar a caixa de dialogo.
+                  Navigator.pop(context);
+                },
+                child: const Text("Camera"),
+              ),
+
+              TextButton(
+                onPressed: () {
+                  _getImgGalery();
+
+                  //para fechar a caixa de dialogo.
+                  Navigator.pop(context);
+                },
+                child: const Text("Galery"),
+              ), //TextButton
+
+              TextButton(
+                onPressed: () {
+                  //fecha a janela se não quiser mais adicionar uma imagen
+                  Navigator.pop(context);
+                },
+                child: const Text('Voltar'),
+              ),
+            ],
+          );
+        });
+  } //_requestImage
 
   Future<bool> _requestPop() {
     if (_userEdited) {
