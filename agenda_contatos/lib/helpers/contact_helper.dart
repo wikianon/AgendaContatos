@@ -64,8 +64,7 @@ class ContactHelper {
     Database dbContact = await getDatabase;
 
     //Para usarmos o contact.toMap() temos que fazer um casting que define o seu tipo.
-    contact.id = await dbContact.insert(
-        contactTable, contact.toMap() as Map<String, dynamic>);
+    contact.id = await dbContact.insert(contactTable, contact.toMap() as Map<String, dynamic>);
 
     return contact;
   } //saveContact
@@ -74,8 +73,7 @@ class ContactHelper {
     Database dbContact = await getDatabase;
     List<Map> maps = await dbContact.query(contactTable,
         columns: [idColumn, nameColumn, emailColumn, phoneColumn, imageColumn],
-        where: "$idColumn = ?",
-        whereArgs: [id]);
+        where: "$idColumn = ?", whereArgs: [id]);
 
     if (maps.isNotEmpty) {
       return Contact.fromMap(maps.first);
@@ -89,17 +87,14 @@ class ContactHelper {
   Future<int> deleteContact(int id) async {
     Database dbContact = await getDatabase;
 
-    return await dbContact
-        .delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
+    return await dbContact.delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
   } //deleteContact
 
   //atualizando os contatos
   Future<int> updateContact(Contact contact) async {
     Database dbContact = await getDatabase;
 
-    return await dbContact.update(
-        contactTable, contact.toMap() as Map<String, dynamic>,
-        where: "$idColumn = ?", whereArgs: [contact.id]);
+    return await dbContact.update(contactTable, contact.toMap() as Map<String, dynamic>, where: "$idColumn = ?", whereArgs: [contact.id]);
   }
 
   Future<List> getAllContacts() async {
@@ -122,8 +117,7 @@ class ContactHelper {
   Future<int?> getNumber() async {
     Database dbContact = await getDatabase;
 
-    return Sqflite.firstIntValue(
-        await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
+    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
   } //getNumber
 
   Future<void> closeDatabase() async {
